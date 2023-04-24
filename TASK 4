@@ -1,0 +1,43 @@
+import { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import axios from 'axios';
+
+function AddServer() {
+  const [server, setServer] = useState({ name: '', language: '', framework: '' });
+
+  const handleChange = (event) => {
+    setServer({ ...server, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios.post('/servers', server)
+      .then(() => {
+        setServer({ name: '', language: '', framework: '' });
+        alert('Server created!');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  return (
+    <>
+      <h1>Add Server</h1>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control type="text" name="name" value={server.name} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group controlId="formLanguage">
+          <Form.Label>Language</Form.Label>
+          <Form.Control type="text" name="language" value={server.language} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group controlId="formFramework">
+          <Form.Label>Framework</Form.Label>
+          <Form.Control type="text" name="framework" value={server.framework} onChange={handleChange} />
+        </Form.Group>
+        <Button variant="primary" type="submit">Create</Button>
+      </Form>
+    </>
+ 
